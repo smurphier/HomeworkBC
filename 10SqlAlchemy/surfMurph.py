@@ -2,7 +2,8 @@
 # Use FLASK to create your routes.
  
 import numpy as np
-import sqlalchemy
+import datetime as dt
+# import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
@@ -22,33 +23,48 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     return (f"Welcome to the homepage: available routes are:<br/>"
-            f"`/api/precipitation`<br/>"
-            f"`/api/stations`<br/>"
-            f"`/api/temperature`<br/>"
-            f"and `/api/<start>` & `/api/<start>/<end>`")
+            f"`/api/precipitation`  (precipitation for most recent 12months observed)<br/>"
+            f"`/api/stations`    (list of observation stations in Hawaii)<br/>"
+            f"`/api/temperature`    (temperatures for most recent 12months observed)<br/>"
+            f"`/api/<start>`     (recent temperature statistics, since a specific date)<br/>"
+            f"and `/api/<start>/<end>`  (temperature statistics for a specific RANGE of dates)")
+
 
 @app.route("/api/precipitation")
 def precip():
-    # Convert query results to Dictionary, `date` as key, `prcp` as value.
+    """Query/retrieve the data and precipitation scores:
+    Convert query results to a Dictionary, date=key, prcp=value.
+	Return the JSON representation of your dictionary.
+
+    Retrieve start & end dates for last 12months of 2010-01-01 to 2017-08-23:
+    Capture last date, convert dtype for timedelta fcn to derive start date:"""
     last_day = session.query(Measurement.date).order_by(Measurement.date.desc()).first() 
-    yr_ago = dt.date(2017,8,23) - dt.timedelta(days=366) 
-    # Perform a query to retrieve the data and precipitation scores
-    YrAgo = session.query(Measurement.station, Measurement.date,                       Measurement.prcp).                filter(Measurement.date > yr_ago).                order_by(Measurement.date).all()
-    yrago_df = pd.DataFrame(YrAgo, columns=['station', 'date', 'precip'])
-    yrago_df.set_index('date', inplace=True)
-    yrago_df.head()
-    # Sort the dataframe by date --- AND GET RID OF NULL (NaN) VALUES ---
-    yrago_df.sort_values('date', na_position='first')
-    yrago_df['precip'].isnull().sum().sum()    ## 208 NaNv alues; ALL in precip column
-    yrago_df.dropna(inplace=True)
-    
-    # precip_date = session.query(Measurement.date, Measurement.prcp).\
-    #         filter(Measurement.date == start_date).\
-    #         filter(Measurement.date <= end_date).\
-    #         order_by(func.sum(Measurement.prcp).desc()).all()
-    precip_dict = list(np.ravel(precip_date))
-    print(precip_dict)
-    return precip_dict
+    last_day = str(last_day)
+    last_day_s= (last_day[2:12]) 
+    last_date = dt.datetime.strptime(end_date_s, '%Y-%m-%d').date()
+    yr_ago = last_date - dt.timedelta(days=365) 
+
+    precip_trip = session.query(Measurement.date, func.sum(Measurement.prcp).\
+        filter(Measurement.date >= yr_ago).\
+        filter(Measurement.date <= last_date).\
+            order_by(Measurement.date).all()
+  
+    # start_day = '2016-09-14'
+    # start_date = dt.datetime.strptime(start_day, '%Y-%m-%d').date()
+    # end_day = '2016-09-29'
+    # end_date = dt.datetime.strptime(end_day, '%Y-%m-%d').date()
+    # print(type(start_date))   
+    # print(start_date, end_date)
+    # num_days = (end_date - start_date).days
+    # print(num_days)
+
+    # print(type(precip_trip))  ## list
+    # precip_trip
+    precip_dict = dict(precip_trip)
+    # precip_dict
+    precip = list(np.ravel(precip_dict, order='F'))
+    precip.json()
+
 
 @app.route("/api/stations")
 def stations():
@@ -67,38 +83,55 @@ def temperatures():
                 order_by(Measurement.date).all()
     return jsonify(YrAgo)
 
-# * "/api/<start>" and "/api/<start>/<end>"
+#   * Return a JSON list of min, avg, max temp for a given start or start-end range.
 @app.route("/api/<start>")
-def sttemp():
+def strtemp():
+    start = input(f("Select a START date for your trip to Hawaii: yyyy-mm-dd"))
     print(f"Start date will be {start}")
     start_date = start
-    return start_date
+    return calc_temps(start_date)
 
 @app.route("/api/<start>/<end>")
 def endtemp():
-    print(f"END date will be {end}")
+    end = input(f("Select an END date for your trip to Hawaii: yyyy-mm-dd"))
+    print(f"End date will be {end}")
     end_date = end
-    return end_date
+    return calc_temps(start_date, end_date)
 
 def calc_temps(start_date, end_date):
+    # start_day = '2016-09-14'
+    # start_date = dt.datetime.strptime(start_day, '%Y-%m-%d').date()
+    # end_day = '2016-09-29'
+    # end_date = dt.datetime.strptime(end_day, '%Y-%m-%d').date()
+    # print(type(start_date))   
+    # print(start_date, end_date)
+
     return session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), \
                          func.max(Measurement.tobs)).\
                     filter(Measurement.date >= start_date).\
                     filter(Measurement.date <= end_date).all()
     templist = calc_temps(start_date, end_date)
+    # start_date = dt.datetime.strptime(start_date, '%Y-%m-%d').date()
+    # end_date = dt.datetime.strptime(end_date, '%Y-%m-%d').date()
+    # num_days = (end_date - start_date).days
+    # print(num_days)
+    return(f"Your trip {start_date} to {end_date} can expect to see temperatures like this:")
+        # over the {num_days} days:")
+    return jsonify(templist)
+
+def calc_temps(start_date):
+    return session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), \
+                         func.max(Measurement.tobs)).\
+                    filter(Measurement.date >= start_date).all()
+    templist = calc_temps(start_date)
+    return(f"Your trip on {start_date} can expect to see these temperatures like this:")
     return jsonify(templist)
 
 
-#   * Return a JSON list of the minimum temperature, the average temperature, and the max temperature for a given start or start-end range.
-#   * When given the start only, calculate `TMIN`, `TAVG`, and `TMAX` for all dates greater than and equal to the start date.
-#   * Hint: You may want to look into how to create a defualt value for your route variable.
-#   * When given the start and the end date, calculate the `TMIN`, `TAVG`, and `TMAX` for dates between the start and end date inclusive.
-# ## Hints
-# * Must join station + measurement tables for some of the analysis queries.
 # * Use Flask `jsonify` to convert your API data to a valid JSON response object.
-# @app.route("/jsonified")
-# def jsonified():
-#     return jsonify(hello_dict)
+@app.route("/jsonified")
+def jsonified():
+    return jsonify(hello_dict)
 
 if __name__ == "__main__":
     app.run(debug=True)
