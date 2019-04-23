@@ -22,11 +22,11 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     return (f"Welcome to the homepage: available routes are:<br/>"
-            f"`/api/precipitation`<br/>"  ## (precipitation for most recent 12months observed)
-            f"`/api/stations`<br/>"   ## (list of observation stations in Hawaii)
-            f"`/api/temperature`<br/>"    ## (temperatures for most recent 12months observed)
-            f"`/api/start<start>`<br/>"    ## (recent temperature statistics, since a specific date)
-            f"`/api/start_end<start>/<end>`")  ## (temperature statistics for a specific RANGE of dates)
+            f"`/api/precipitation`<br/>"  ##  (precipitation for most recent 12months observed)
+            f"`/api/stations`<br/>"   ##  (list of observation stations in Hawaii)
+            f"`/api/temperature`<br/>"    ##  (temperatures for most recent 12months observed)
+            f"`/api/start`<br/>"       ##  (recent temperature statistics, since a specific date)<br/>"
+            f"`/api/start_end`")      ##  (temperature statistics for a specific RANGE of dates)
 
 
 @app.route("/api/precipitation")
@@ -94,49 +94,51 @@ def temperatures():
                 order_by(Measurement.date).all()
     return jsonify(YrAgo)
 
-# #   * Return a JSON list of min, avg, max temp for a given start or start-end range.
-# @app.route("/api/start<start>")
-# def strtemp():
-#     start = input(f("Select a START date for your trip to Hawaii: yyyy-mm-dd"))
-#     print(f"Start date will be {start}")
-#     start_date = start
-#     return calc_temps(start_date)
+#   * Return a JSON list of min, avg, max temp for a given start or start-end range.
+@app.route("/api/start")
+def strtemp():
+    ## Needs a Try/Except structure for user entry errors....
+    start = input(f"Select a START date for your trip to Hawaii: yyyy-mm-dd")
+    print(f"Start date will be {start}")
+    start_date = start
+    return calc_temps(start_date)
 
-# @app.route("/api/start_end<start>/<end>")
-# def endtemp():
-#     end = input(f("Select an END date for your trip to Hawaii: yyyy-mm-dd"))
-#     print(f"End date will be {end}")
-#     end_date = end
-#     return calc_temps(start_date, end_date)
+@app.route("/api/start_end")
+def endtemp():
+    ## Needs a Try/Except structure for user entry errors....
+    end = input(f"Select an END date for your trip to Hawaii: yyyy-mm-dd")
+    print(f"End date will be {end}")
+    end_date = end
+    return calc_temps(start_date, end_date)
 
-# def calc_temps(start_date, end_date):
-#     # start_day = '2016-09-14'
-#     # start_date = dt.datetime.strptime(start_day, '%Y-%m-%d').date()
-#     # end_day = '2016-09-29'
-#     # end_date = dt.datetime.strptime(end_day, '%Y-%m-%d').date()
-#     # print(type(start_date))   
-#     # print(start_date, end_date)
+def calc_temps(start_date, end_date):
+    # start_day = '2016-09-14'
+    # start_date = dt.datetime.strptime(start_day, '%Y-%m-%d').date()
+    # end_day = '2016-09-29'
+    # end_date = dt.datetime.strptime(end_day, '%Y-%m-%d').date()
+    # print(type(start_date))   
+    # print(start_date, end_date)
 
-#     return session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), \
-#                          func.max(Measurement.tobs)).\
-#                     filter(Measurement.date >= start_date).\
-#                     filter(Measurement.date <= end_date).all()
-#     templist = calc_temps(start_date, end_date)
-#     # start_date = dt.datetime.strptime(start_date, '%Y-%m-%d').date()
-#     # end_date = dt.datetime.strptime(end_date, '%Y-%m-%d').date()
-#     # num_days = (end_date - start_date).days
-#     # print(num_days)
-#     return(f"Your trip {start_date} to {end_date} can expect to see temperatures like this:")
-#         # over the {num_days} days:")
-#     return jsonify(templist)
+    return session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), \
+                         func.max(Measurement.tobs)).\
+                    filter(Measurement.date >= start_date).\
+                    filter(Measurement.date <= end_date).all()
+    templist = calc_temps(start_date, end_date)
+    # start_date = dt.datetime.strptime(start_date, '%Y-%m-%d').date()
+    # end_date = dt.datetime.strptime(end_date, '%Y-%m-%d').date()
+    # num_days = (end_date - start_date).days
+    # print(num_days)
+    return(f"Your trip {start_date} to {end_date} can expect to see temperatures like this:")
+        # over the {num_days} days:")
+    return jsonify(templist)
 
-# def calc_temps(start_date):
-#     return session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), \
-#                          func.max(Measurement.tobs)).\
-#                     filter(Measurement.date >= start_date).all()
-#     templist = calc_temps(start_date)
-#     return(f"Your trip on {start_date} can expect to see these temperatures like this:")
-#     return jsonify(templist)
+def calc_temps(start_date):
+    return session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), \
+                         func.max(Measurement.tobs)).\
+                    filter(Measurement.date >= start_date).all()
+    templist = calc_temps(start_date)
+    return(f"Your trip on {start_date} can expect to see these temperatures like this:")
+    return jsonify(templist)
 
 
 if __name__ == "__main__":
