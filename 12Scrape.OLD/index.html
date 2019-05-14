@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Mars</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container text-center">
+      <h1 class="jumbotron">All about Mars</h1>
+      <div>
+          <div class="col-lg-4">
+              <div class="card" style="width: 200rem;">
+                  <div class="card-body">
+                    <h4 class="card-title">{{ item.key }}</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ item.value }}</h6>
+                    <p class="card-text">Potential Revenue: {{ item.cost * item.stock}}</p>
+                  </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            div>
+        <!-- write a for loop that lists out your data and accesses the values using dot notation. -->
+          {% for item in inventory %}
+          <div class="col-lg-4">
+            {% for item in inventory %}
+                    <h4 >{{ item.type }}</h4>
+                    <h6 >Cost: {{ item.cost }}</h6>
+                    <p >Potential Revenue: {{ item.cost * item.stock}}</p>
+                  </div>
+                </div>
+            </div>
+            {% endfor %}
+          </div>
+          <div clas="container">
+            <div class="jumbotron text-center">
+              <h1>Endless Summer</h1>
+              <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Surfing Reports</a></p>
+            </div>
+          <!-- surf data -->
+            <div class="row">
+              <div class="col-md-8 col-md-offset-2">
+                <img src= {{ surfing.src }} width: 50% />
+                <h3>Santa Barbara Surf Report</h3>
+                <p>{{ surfing.report }}</p>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </body>
+
+</html>

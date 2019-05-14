@@ -1,0 +1,164 @@
+for-loop: initialize iteration variable, set conditional, continues loop until conditional reahed statement resolution (conditional becomes true)
+
+differente bariations of for statements in JS
+1) Wed was for-loop
+2) anonymous functions -- have no name, as 1st argrument, b/c only used thru 1 (one) iteration through this array, doesn't need to be called anywhere else.
+
+(((hovering on "function" pulls up a drop list of anonymous functions)))
+could have also passed it the reference to a named function : option 3.
+
+	reference !! what's difference -- how do I call a function in JS?
+	in forEach, i "refer" to the fcn, rather than calling it
+	JS doesn't want you to pass the actuall calling of the fcn for EACH item,
+	
+
+3) forEach - iterates across an array			10:09
+for each item in array, JS will call the function and execute
+students.forEach(printName(name)); 		error function name not defined ??
+
+studnets.forEAch(function(name){
+	console.log(name)'
+} 					 ();  offensive to have to add...
+I can be crazy specific with the conditions of executing a simple for-loop,
+but forEach is inflexible, yet consistent.
+I'm having forEach call the concept (reference) of calling this.
+studnets.forEach(console.log);  --->>> prints entire array n times.
+
+// Use a for loop to iterate through the movie scores
+for (var i = 0; i < movieScores.length; i++) {
+
+  // Add each score to the ratings count
+  var score = movieScores[i];
+  sum += score;
+
+// Use a forEach ANON loop to iterate through the movie scores
+movieScores.forEach(function(score){
+  // Add each score to the ratings count
+  // var score = movieScores[i]; -- created by function !!
+  sum += score;
+
+if you REALLY want var i, add that argument to the callback function:
+movieScores.forEach(function(score, i){
+
+var i is a local variable, sum was defined outside the forEach loop, is a global variable
+
+a JS object is like a Python objecct + a Python dictionary, has key:value pairs
+no quotes on key values, stupidly forgiving and so occasionally unpredictable
+so keys CANNOT have SPACES -- DOUBLEquote is best practice, but no spaces is bestest.
+use "DOT notation" to refer to a key:value pair --  movie.name
+if a NESTED data structure, sequels is an array of ints and a string
+	movie.sequels[0]
+what does JSON stand for? JavaScript Object Notation -- so we've been using awhile! 10:51
+	movie["sequels"][0] 	is BOX notation
+movie.rating = 8.5;  adds a key-value pair to an existing object, if not aleady extant.
+var moreMovies = movie.sequels;		creates another COPY of the movie array !!
+
+var year = "profitable";
+console.log(movie[year];	accessing a property on movie, grabs profitable instead...
+	>> true			if want that actual name, use " "
+				if want a variable, use box notation and pass argument
+delete movie.sequels;
+
+if the scale of a variable includes 0.00, that value is "FALSY" and won't execute.
+if (movie.rating){console.log("movie rating exists!") }
+
+
+	
+console.log(Object.keyss(people));
+console.log(Object.values(people));
+console.log(Object.entries(people));	lists keys and values... is the freak.
+
+var people = {
+			flinstones characters, 		COMMA at EOL !!
+	5thkey"confusing" : array of fruit names}
+>>console prints for 5th element
+>>Arary(2) "confusing"
+console.log(Object.entries(people[0]));
+>>Array(2) 0:"confusing" 1:Array(5) 0:"banana" etc....
+console.log(Object.entries(people[0][1][4]));
+>>mango							next activity 11:08
+
+sexy inverse version:
+	if(!word in result) result[word] = 0;
+	result[word]++;					next activity 11:55
+
+return statement fires for each one of the items you are mapping over
+returns item+ism to where/what?? the ANON fcn has the return stmt: 
+	returns it's output to the MAP
+var mapSImpleArray = theStagesOfJS.map(function(itme){ return item_"ism";});
+	12:55 crucial --
+so MAP can pass those things to something
+MAP is alot like forEACH, except it returns a NEW copy of an array.
+	many times can use MAP instead of FOREACH, altho runs slower.
+
+theStagesOfJS.map(function(item,index) {return 'Stage ${index+1}: ${item}'; });
+	what does output look like? an array of strings
+	each string says 'Stage 0: confidence' et al
+		WHY item+1?   becuase didn't create a var to ++ on
+
+var students = [ {name: "Malcomlm", score: 88 }, etc, etc, {etc}];	
+	this is an array of objects
+var names = students.map(function(student) { return student.name; });
+var scores = students.map(function(student) { return student.score; });
+var everything = students.map(function(student) { 
+	return [student.name, student.score]; });
+	return Object.values(student);  });
+consol.log(forEachStages);
+
+() {} [] "" '' ; :
+
+Arrow function (activity 6)	13:10
+USE PARENTHESES although return statement is implied...
+x ? x => y : x => z		this is a VALID line of JS
+				if x is a fxn not var, it gets convoluted
+var mapArrow3 = the StagesOfJS.map((item) => item);
+same as
+var mapArrow3 = the StagesOfJS.map(function(item) {
+	return item
+});
+	ARROW fcnsa are another way to write ANON fcns
+	highlight a term, hit enter and delinter opens pren and sets a close paren ??????
+
+ if you have z arguments and too lazy to use parens, can do this
+var mapArrow3 = theStagesOfJS.map( _ => item);		very UGLY ! ! ! !
+var mapArrow3 = theStagesOfJS.map( () => item);		
+	leaving placeholder parens lets you come back later and add an argument
+princesses.forEach(princess => console.log(`${princess.name}: ${princess.age}`));
+			  -- example this is very powerful
+			returns the entire console.log FUNCTION
+
+NULL == it exists but it doesn't have a value yet		FALSY
+UNDEFINED == it doesn't exist...yet				FALSY
+
+Obejct.keys ( userInfo)
+	returns an array or keys
+	b/c that returns an array, can chain it with ANOTHER fcn that uses arrays
+	keys, values, entries all valid -- entries is an array of arrays
+		treats each array item as a key:value pair
+oject.entries(userInfo).forEach((peu. value[) =>
+console.log('Keu: #{key} and Value ${value}
+
+VAR USER 0 P P MAME: "ERICC:, AGE: 32, LOCATION: "NORTH AMERICA: {, ETC];
+USERS.FOREACH((USER) 
+users is an array of objects (dictionaries)-- each object is an individual "user"
+Object.entries(user) 	-- entries give me keys AND values, an array of arrays now
+Obejct.entries(user).forEach([key, value]) => {		-- loops thru each array
+	console.log('Key: ${key} and Value ${value});
+};
+Last activity						13:50
+recipes, spices and dishes are all arrays now
+
+VERY last activity					13:53
+array of Simppsons characters
+function selectYounger(person) 
+var youngSimplsons - simplsons.filter(selectYounger);
+	the FILTER function returns --- true or false --- to -- the FILTER
+	false, doesn't return anything, so resulting array is SMALLER
+
+
+
+
+
+
+
+
