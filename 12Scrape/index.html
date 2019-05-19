@@ -19,15 +19,15 @@
         <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">NASA news NOW!</a></p>
         <div class="card-body">
           <h4 class="card-subtitle mb-2 text-muted">The <u>newest</u> news item from NASA</h4>
-          <h4 class="text-muted">today, {{mars_data.Date_time}}</h4>
+          <h4 class="text-muted">today, {{ mars_results_dict.Date }}</h4>
         </div>
       </div>
     </div>
     <div class="col-lg-4">
         <div class="card" style="width: 40rem;">
           <div class="card-body">
-            <h4 class="card-title">{{mars_body.News_title}}</h4>
-            <p class="card-text">{{mars_data.News_body}}</p>
+            <h4 class="card-title">{{ mars_results_dict.Mars_news_title }}</h4>
+            <p class="card-text">{{ mars_results_dict.Mars_news_body }}</p>
         </div>
       </div>
     </div>
@@ -39,7 +39,7 @@
       <div class="card" style="width: 40rem;">
         <div class="card-body">
           <h4 >Mars Weather <u>Now</u></h4>
-          <p >{{mars_data.Wea_content}}</p>
+          <p >{{ mars_results_dict.Mars_weather }}</p>
         </div>
       </div>
     </div>
@@ -47,7 +47,7 @@
       <div class="card" style="width: 40rem;">
         <div class="card-body">
           <h4 >Mars' Vital Statistics: </h4>
-          <p >{{mars_table_html}}</p>
+          <p >{{ mars_results_dict.Stats_html_string }}</p>
         </div>
       </div>
     </div>
@@ -60,9 +60,9 @@
         {% for item in mars_data.hemis_dict %}
         <div class="card">
           <div class="card-body col-md-3">
-            <h2>Mars hemisphere {{mars_data.hemis_dict.title}}</h2>
-            <h4>Analogous to Earth hemisphere centered on {{mars_data.hemis_dict.center_landmark}}</h4>
-            <img src= {{mars_data.hemis_dict.img_url}}/>
+            <h2>Mars hemisphere {{ mars_results_dict.Hemispheres.title }}</h2>
+            <h4>Analogous to Earth hemisphere centered on {{ mars_data.hemis_dict.center_landmark }}</h4>
+            <img src= {{ mars_results_dict.Hemispheres.img_url}}/>
             <!-- <a href="{{mars_mission_data['Hemisphere_Image_urls'][1]['img_url']}}" class="thumbnail">
             <img src="{{mars_mission_data['Hemisphere_Image_urls'][1]['img_url']}}" alt="">
             <h4 style="text-align: left">{{mars_mission_data.Hemisphere_Image_urls[1].title}}</h4> -->
