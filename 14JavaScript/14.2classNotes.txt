@@ -154,11 +154,3 @@ function selectYounger(person)
 var youngSimplsons - simplsons.filter(selectYounger);
 	the FILTER function returns --- true or false --- to -- the FILTER
 	false, doesn't return anything, so resulting array is SMALLER
-
-
-
-
-
-
-
-

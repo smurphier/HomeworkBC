@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static/css/style.css">
+  <title>Mars Briefing</title>
+</head>
+
+<body>
+
+  <div class="container text-center"  background="{{ mars_mission_data.Featured_Image }}" alt="Mars Featured Image">
+    <div class="col-lg-4">
+      <div class="card" style="width: 40rem;">
+        <h1 class="jumbotron">Newest Factoids about Mars</h1> 
+        <h3>Refresh for <u>newest</u> Mars info!</h3>
+        <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">NASA news NOW!</a></p>
+        <div class="card-body">
+          <h4 class="card-subtitle mb-2 text-muted">The <u>newest</u> news item from NASA</h4>
+          <h4 class="text-muted">today, {{ mars_mission_data.Date }}</h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card" style="width: 40rem;">
+          <div class="card-body">
+            <h4 class="card-title">{{ mars_mission_data.Mars_news_title }}</h4>
+            <p class="card-text">{{ mars_mission_data.Mars_news_body }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <div class="container text-center"  background="mars_data.image">
+    <div class="col-lg-4">
+      <div class="card" style="width: 40rem;">
+        <div class="card-body">
+          <h4 >Mars Weather <u>Now</u></h4>
+          <p >{{ mars_mission_data.Mars_weather }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card" style="width: 40rem;">
+        <div class="card-body">
+          <h4 >Mars' Vital Statistics: </h4>
+          <div>{{ mars_mission_data.Stats_html_string }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br> 
+
+  <div class="container text-center"  background="mars_data.image">
+    <div class="panel panel-default">
+      <div class="row">
+        {% for item in mars_mission_data.Hemispheres %}
+        <div class="card">
+          <div class="card-body col-md-3">
+            <h2>Mars collaged image: {{ mars_mission_data.Hemispheres.title }}</h2>
+           <img src= {{ mars_mission_data.Hemispheres.img_url }}/>
+        
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

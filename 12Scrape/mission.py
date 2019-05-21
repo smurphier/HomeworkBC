@@ -17,7 +17,7 @@ def scrape_Mars():
     # Create an empty dict to hold results
     mars_results_dict = {}       
 
-    # print("Start executing scrape_mars")  #####
+    print("Start executing scrape_mars")  #####
     #### (1) Retrieve most recent news article from NASA site
     urlNews = "https://mars.nasa.gov/news/"
     browser.visit(urlNews)
@@ -26,7 +26,7 @@ def scrape_Mars():
     # parse HTML with Beautiful Soup, to find tags for desired content
     soupNews = BeautifulSoup(htmlNews, 'html.parser')
     # Use the closest tags to capture news articles, tagged as list items
-    resultNews = soupNews.find_all('li', class_="slide")
+    # resultNews = soupNews.find_all('li', class_="slide")
     # Capture the first instance of it, the most recent news article 
     # Use a more specific tag to capture just the text desired
     news_title = soupNews.find('h3').text
@@ -37,7 +37,7 @@ def scrape_Mars():
     mars_results_dict["Mars_news_title"] = news_title
     mars_results_dict["Mars_news_body"] = news_body
 
-    # print("after News, before Image")       #####
+    print("after News, before Image")       #####
     #### (2) Retrieve a featured image from NASA site, large version of file
     # This page takes awhile to load... sleep 5seconds before parsing.
     urlImg = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
@@ -47,7 +47,7 @@ def scrape_Mars():
     soupImg = BeautifulSoup(htmlImg, 'html.parser')
     # Within div:class="carousel_container" is a footer button link to a smaller image 
     # But the larger image we want is the wallpaper in the "article" tag.
-    main_feature = soupImg.find('article', class_='carousel_item')       
+    # main_feature = soupImg.find('article', class_='carousel_item')       
     main_alt = soupImg.find('a', class_='button fancybox')
     image_suffix = main_alt['data-fancybox-href']
     # This is not a complete URL; give it a prefix so it can be used directly as URL.
@@ -55,8 +55,10 @@ def scrape_Mars():
     marsImg_link = image_prefix + image_suffix
 
     mars_results_dict["MarsImg_link"] = marsImg_link
+    # full_image = browser.find_by_id('full_image')
+    # full_image.click()
 
-    # print("after Image, before Weather")      #####
+    print("after Image, before Weather")      #####
     #### (3) Mars Weather tweet: scrape the latest Mars weather report as `mars_weather`.
     urlWea = "https://twitter.com/marswxreport?lang=en"
     ## Question: .get is as good as ".post" for the entire assignment?? because we are
@@ -68,7 +70,7 @@ def scrape_Mars():
 
     mars_results_dict["Mars_weather"] = mars_weather
 
-    # print("after Weather, before StatsTable")
+    print("after Weather, before StatsTable")
     #### (4) From NASA facts page on mars, retrieve the table of vital statistics.
     # Visit (http://space-facts.com/mars/) & panda-scrape the Mars table of facts;
     # Use Pandas to convert the data to a HTML table string
@@ -87,7 +89,7 @@ def scrape_Mars():
 
     mars_results_dict["Stats_html_string"] = stats_html_string
 
-    # print("after StatsTable, before Hemis")
+    print("after StatsTable, before Hemis")
     #### (5) Get 4 images of Mars' Hemispheres
     # Visit (https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars)
     # Obtain images for each of Mar's hemispheres (click thru links to get full-res images).
@@ -98,11 +100,11 @@ def scrape_Mars():
     urlHemis = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
     browser.visit(urlHemis)
     # Pages take a few seconds to load; wait, and generate result <after> page is loaded
-    time.sleep(10)
+    time.sleep(2)
     htmlHemis = browser.html
     soupHemi = BeautifulSoup(htmlHemis, 'html.parser')
     # Retrieve all elements (in a glob) that contain hemisphere content/links
-    hemis_div = soupHemi.find_all('div', class_='collapsible results')
+    hemis_div = soupHemi.find('div', class_='collapsible results')
     # Capture all subdivisions that contains title and url; for iteration.
     hemis_descr = hemis_div.find_all('div', class_='description')
 
@@ -110,7 +112,7 @@ def scrape_Mars():
     hemispheres = []
     url_prefix = "https://astrogeology.usgs.gov"
     # Iterate through "item"s to capture target urls containing the hemisphere images
-    for hemi in hemis_div:
+    for hemi in hemis_descr:    
         # Use Beautiful Soup's find() method to navigate and retrieve attributes
         hemi_title =hemi.h3.text
         # Put together prefix and suffix of the image urls.
@@ -125,22 +127,18 @@ def scrape_Mars():
 
     mars_results_dict["Hemispheres"] = hemispheres
 
-    # # I found analagous central locations on earth -> Hemispheres more comprehensible ?   
-    # center_landmark = ["Hawaii", "Vietnam", "BikiniAtoll", "SriLanka"]
-    # Hemispheres = dict(zip(center_landmark, zip(title, img_url)))
-
-    # print("after hemispheres, before date-time")
+    print("after hemispheres, before date-time")
     #### (5) Return the dictionary that collects the results of each section...
     # ["Mars_news_title"], ["Mars_news_body"], 
     # ["MarsImg_link"],["Mars_weather"],
     # ["Stats_html_string"],["Hemispheres"], ["Date"]
-    ### ...and capture the date, add to the dictionary.
-    retr_date = date.today()
-    mars_results_dict["Date"] = retr_date
+    # ### ...and capture the date, add to the dictionary.
+    # retr_date = date.today()
+    # mars_results_dict["Date"] = retr_date
 
+    browser.quit()   
     return mars_results_dict 
 
-    browser.quit()    
-# print("after browserQuit")
+    # print("after browserQuit")
 # result_A = scrape_Mars()
 # print(result_A)
