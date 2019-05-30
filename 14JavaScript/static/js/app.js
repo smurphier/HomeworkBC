@@ -1,16 +1,15 @@
 // from data.js
 var tableData = data;
-console.log(tableData);
+// console.log(tableData);
 
 var tbody = d3.select("tbody");
 
-function buildTable(data) {
+function buildTable(tableData) {
   console.log("executing buildTable");  
   // First, clear out existing data in "tbody" (for each iteration).
-  console.log("executing function buildTable");
   tbody.html("");
   // add comment
-  data.forEach((sighting) => {
+  tableData.forEach((sighting) => {
     var row = tbody.append("tr");
     Object.entries(sighting).forEach(([key, value]) => {
       var cell = row.append("td");
@@ -30,18 +29,18 @@ function clickBuild() {
   // Get the value property of the input element
   var inputValue = inputElement.property("value");
   console.log(inputValue);
-  // Reusable filter, can filter by multiple inputs??
-  console.log(filterSoFar);
+  // console.log(filterSoFar);
   if (inputValue) {
     // Apply `filter` to the table data to *only keep the
     // rows where the `datetime` value *matches the filter value:
-    filterSoFar = filterSoFar.filter(row => row.datetime === inputValue);
+    filterSoFar = filterSoFar.filter(sighting => sighting.datetime === inputValue);
   }
 
+  // Reusable filter, can filter by multiple inputs??
   // filterSoFar = filterSoFar.filter(sighting => sighting.datetime === inputValue);
   // filterSoFar1 = filterSoFar.filter(sighting => sighting.datetime === inputValue);
   console.log(filterSoFar);
-  console.log("logging filtered data")
+  // console.log("logging filtered data")
   buildTable(filterSoFar);
 }
 
@@ -53,54 +52,38 @@ buildTable(tableData);
 // Use bootstrap to style the table with striped rows
 // Done in HTML file index.html
 
+// LASTLY: Replace 3rd row of table with new data:
+// Create new data Object; select row to replace; forEach to replace.
+var inData = {
+  datetime: "1/28/1996", 
+  city: "dallas",
+  state: "tx",
+  country: "us",
+  shape: "star",
+  durationMinutes: "5 mins.",
+  comments: "Cowboys win a superbowl, that's alien!."
+};
+console.log(inData);
 
-// var inData = {
-//   // ID: ,
-//   datetime: "1/28/1996", 
-//   city: "dallas",
-//   state: "tx",
-//   country: "us",
-//   shape: "star",
-//   durationMinutes: "5 mins.",
-//   comments: "Cowboys win a superbowl, that's alien!."
-// };
 // Select the 3rd data row of the HTML table, by it's ID.
+var toReplace = tableData[2];
+console.log(toReplace);
 
-// // var toReplace = data.getElementById("tr").item(2);
-// var toReplace = d3.select("tr").item(2);
-// // // Iterate through datum values and substite the inData values.
-// // toReplace.map(datum => inData.value);
-// console.log(this);
+// Iterate through datum values and substite the inData values.
+Object.values(toReplace).forEach(d => inData.value);
 
-// var thirdSight = data[2];
-// console.log(thirdSight);
-// [...parent.children].forEach(function (child) {
-//   console.log(child)
+// tableData[2].forEach(function(sighting) {
 // });
-// thirdSight.forEach(function([key, value]) {
-//   thirdSight.getElementById(td).innerHTML=inData;
-// })
-
-// data.forEach(function(each, index) {
-//   // The original array is mutated with forEach
-//   data[index] = `Stage ${index + 1}: ${each}`;
+// Object.values(tableData[2]).forEach(([key, value]) => {
+//   var cell = row.text("");
+//   cell.text(inData.value);
 // });
-// for (var i = 0; i < stringArray.length; i++) {
-//   var currentWord = stringArray[i];
-//   if (currentWord in wordFrequency) {
-//     // Add one to the counter
-//     wordFrequency[currentWord] += 1;
-//   }
-//   else {
-//     // Set the counter at 1
-//     wordFrequency[currentWord] = 1;
-//   }
-// }
-// console.log(wordFrequency);
-// return wordFrequency;
-// }
+// tableData[2].function(callback(tableData [, 2]) => {
+// tableData.getElementById(td).innerHTML=inData;
 
+console.log(toReplace);
+console.log(tableData[2]);
 
 
 // // BONUS: how many sightings fit filter criteria?
-// var sumFilter = filteredData.length;
+// var sumFilter = filterSoFar.length;
