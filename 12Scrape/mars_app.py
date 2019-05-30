@@ -39,7 +39,7 @@ def scrape():
     # import the scrape function from the scrape file
     # mars_mission_data = mission.scrape_Mars()
     mars_mission_data = scrape_Mars()
-    print("Completed scraping in app.py")
+    # print("Completed scraping in app.py")
     pprint(mars_mission_data)
 
     # collection.update_one({}, mars_mission_data, upsert=True)

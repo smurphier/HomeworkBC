@@ -26,8 +26,8 @@
     <div class="col-lg-4">
         <div class="card" style="width: 40rem;">
           <div class="card-body">
-            <h4 class="card-title">{{ mars_mission_data.Mars_news_title }}</h4>
-            <p class="card-text">{{ mars_mission_data.Mars_news_body }}</p>
+            <h4 class="card-title">{{mars_mission_data.Mars_news_title}}</h4>
+            <p class="card-text">{{mars_mission_data.Mars_news_body}}</p>
         </div>
       </div>
     </div>
@@ -47,12 +47,23 @@
       <div class="card" style="width: 40rem;">
         <div class="card-body">
           <h4 >Mars' Vital Statistics: </h4>
-          <div>{{ mars_mission_data.Stats_html_string }}</div>
+          <div>{{ mars_mission_data.Stats_html_string | safe }}</div>
         </div>
       </div>
     </div>
   </div>
   <br> 
+  <div class="col-md-4">
+			<div class="panel panel-default">
+				<div class="panel-body">
+            <h2>Mars Hemispheres</h2>
+              <a href="{{mars_mission_data['Hemisphere_Image_urls'][0]['img_url']}}" class="thumbnail">
+                <img src="{{mars_mission_data['Hemisphere_Image_urls'][0]['img_url']}}" alt="">
+                <h4 style="text-align: left">{{mars_mission_data.Hemisphere_Image_urls[0].title}}</h4>
+              </a>
+				</div>
+			</div>
+    </div>
 
   <div class="container text-center"  background="mars_data.image">
     <div class="panel panel-default">
@@ -61,8 +72,7 @@
         <div class="card">
           <div class="card-body col-md-3">
             <h2>Mars collaged image: {{ mars_mission_data.Hemispheres.title }}</h2>
-           <img src= {{ mars_mission_data.Hemispheres.img_url }}/>
-        
+            <img src="mars_mission_data.Hemispheres.img_url"></img>
           </div>
         </div>
         {% endfor %}
